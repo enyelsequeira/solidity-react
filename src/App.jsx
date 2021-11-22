@@ -11,12 +11,12 @@ function App() {
 
       <div className="bg-gradient-to-r  from-purple-200 to-red-200 rounded-2xl mt-11 py-10 ">
         <div className=" flex flex-col items-center space-y-5">
-          <p className="text-3xl leading-loose tracking-wide my-2 p-7 w-2/3 text-center">
+          <p className="text-2xl md:text-3xl leading-loose tracking-wide my-2 p-7 w-full md:w-2/3  text-center">
             My name is Enyel, I am currently working on learning about web3 and
             solidity ecosystem.
           </p>
 
-          <p className="text-2xl tracking-wide p-6">
+          <p className="text-2xl tracking-wide p-6 text-center">
             Lets connect and build something together.
           </p>
         </div>
