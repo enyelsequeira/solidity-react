@@ -2,7 +2,6 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  background-color: rgb(41, 34, 26);
 }
 body {
   margin: 0;
@@ -11,6 +10,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgba(216, 192, 192, 0.74);
 }
 
 code {
