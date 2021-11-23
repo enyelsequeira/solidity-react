@@ -110,7 +110,9 @@ export const WaveProvider = ({ children }) => {
 
         // execute wave from your smart contract
 
-        const waveTxn = await wavePortalContract.wave(messageData, twitter);
+        const waveTxn = await wavePortalContract.wave(messageData, twitter, {
+          gasLimit: 300000,
+        });
         setIsLoading(true);
         // console.log("Mining...", waveTxn.hash);
 
@@ -172,6 +174,38 @@ export const WaveProvider = ({ children }) => {
     checkIfWalletIsConnect();
     checkIfWaveExists();
   }, [waves]);
+
+  useEffect(() => {
+    let wavePortalContract;
+    const onNewWave = (from, timestamp, message, twitter) => {
+      console.log("New Wave", from, timestamp, message, twitter);
+
+      setAllWaves((prevState) => [
+        ...prevState,
+        {
+          address: from,
+          timestamp: new Date(timestamp.toNumber() * 1000).toLocaleString(),
+          message: message,
+          twitter: twitter,
+        },
+      ]);
+    };
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      wavePortalContract = new ethers.Contract(
+        contractAddress,
+        contractABI,
+        signer
+      );
+      wavePortalContract.on("NewWave", onNewWave);
+    }
+    return () => {
+      if (wavePortalContract) {
+        wavePortalContract.off("NewWave", onNewWave);
+      }
+    };
+  }, []);
 
   return (
     <WaveContext.Provider

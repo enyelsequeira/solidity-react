@@ -67,7 +67,7 @@ function App() {
           </motion.button>
         )}
         {/* all waves here */}
-        <div className="border-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 px-1 py-2">
           {allWaves.map((wave, index) => {
             console.log(wave);
             return <InfoCard key={index} wave={wave} />;
