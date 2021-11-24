@@ -54,7 +54,7 @@ function App() {
 
         <InputForm />
 
-        {isLoading && isLoading && <Loader />}
+        {isLoading ? <Loader /> : null}
 
         {!currentAccount && (
           <motion.button

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { contractABI, contractAddress } from "../utils/constants";
 import { ethers } from "ethers";
+import useFetch from "../hooks/useFetch";
 
 export const WaveContext = React.createContext();
 
@@ -14,10 +15,14 @@ export const WaveProvider = ({ children }) => {
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
+    if (value === "") {
+      alert("Please enter something");
+    }
     setInfoData((prev) => ({ ...prev, [name]: value }));
   };
   const messageData = infoData.message;
   const twitter = infoData.twitter;
+  const keyword = infoData.keyword;
 
   const checkIfWalletIsConnect = async () => {
     try {
@@ -37,7 +42,7 @@ export const WaveProvider = ({ children }) => {
       if (accounts.length !== 0) {
         // we grab the first account
         const account = accounts[0];
-        console.log(`Found an authorized Account: ${account}`);
+        // console.log(`Found an authorized Account: ${account}`);
 
         setCurrentAccount(account);
         getAllWaves();
@@ -81,7 +86,7 @@ export const WaveProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
 
-      console.log(`connected, ${accounts[0]}`);
+      // console.log(`connected, ${accounts[0]}`);
       setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
@@ -102,17 +107,20 @@ export const WaveProvider = ({ children }) => {
           signer
         );
 
-        console.log(wavePortalContract.getTotalWaves());
-
         let count = await wavePortalContract.getTotalWaves();
         // console.log(`Retrieving the count ${count.toNumber()} `);
         setWaves(count.toNumber());
 
         // execute wave from your smart contract
 
-        const waveTxn = await wavePortalContract.wave(messageData, twitter, {
-          gasLimit: 300000,
-        });
+        const waveTxn = await wavePortalContract.wave(
+          messageData,
+          twitter,
+          keyword,
+          {
+            gasLimit: 300000,
+          }
+        );
         setIsLoading(true);
         // console.log("Mining...", waveTxn.hash);
 
@@ -129,6 +137,7 @@ export const WaveProvider = ({ children }) => {
         throw new Error("No ethereum object");
       }
     } catch (error) {
+      alert("make sure all field are filled");
       console.log(error);
     }
   };
@@ -159,6 +168,7 @@ export const WaveProvider = ({ children }) => {
             ).toLocaleString(),
             message: wave.message,
             twitter: wave.account,
+            keyword: wave.keyword,
           });
         });
         setAllWaves(wavesCleaned);
@@ -178,8 +188,6 @@ export const WaveProvider = ({ children }) => {
   useEffect(() => {
     let wavePortalContract;
     const onNewWave = (from, timestamp, message, twitter) => {
-      console.log("New Wave", from, timestamp, message, twitter);
-
       setAllWaves((prevState) => [
         ...prevState,
         {
