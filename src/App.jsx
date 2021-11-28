@@ -47,6 +47,10 @@ function App() {
             something together.
           </p>
 
+          <p className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600 uppercase">
+            Make sure you are connected to Rinkeby Test Network
+          </p>
+
           <p className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-600 py-3">
             Current waves {waves}
           </p>
